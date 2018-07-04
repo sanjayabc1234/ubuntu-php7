@@ -72,6 +72,7 @@ VOLUME /var/www/html
 VOLUME /var/log/httpd
 VOLUME /etc/apache2
 
+RUN apt-get install -y sudo
 RUN echo "root:ser_123" | chpasswd
 
 RUN groupadd dev
