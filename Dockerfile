@@ -56,6 +56,7 @@ RUN apt-get install -y \
 	php7.0-xmlrpc \
 	php7.0-xsl \
 	libsasl2-dev \
+	php7.0-bcmath \
 	php7.0-zip
 
 #RUN pecl install mongodb
