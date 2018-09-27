@@ -19,7 +19,6 @@ RUN sed -i "13 i \ \n\t# Added automatically using dockerfile\n\t<Directory /var
 RUN sed -i '30 a \ \n\t# Added automatically using dockerfile\n\t<IfModule mod_dir.c>\n\t\tDirectoryIndex index.php index.pl index.cgi index.html index.xhtml index.htm\t\n\t</IfModule>\n' /etc/apache2/sites-available/000-default.conf
 
 RUN a2enmod rewrite
-#RUN chown -R www-data:www-data /var/www/html
 RUN service apache2 restart
 
 RUN apt-get install -y \
@@ -42,7 +41,6 @@ RUN apt-get install -y \
 	php7.0-mbstring \
 	php7.0-mcrypt \
 	php7.0-mysql \
-	php-mongodb \
 	php7.0-odbc \
 	php7.0-opcache \
 	php7.0-pgsql \
@@ -59,15 +57,9 @@ RUN apt-get install -y \
 	php7.0-bcmath \
 	php7.0-zip
 
-#RUN pecl install mongodb
-
-#RUN echo "extension=mongodb.so" > /etc/php/7.0/fpm/conf.d/20-mongodb.ini && \
-#	echo "extension=mongodb.so" > /etc/php/7.0/cli/conf.d/20-mongodb.ini && \
-#	echo "extension=mongodb.so" > /etc/php/7.0/mods-available/mongodb.ini
-
-#COPY index.php /var/www/html/
-#COPY run-lamp.sh /usr/sbin/
-#RUN chmod +x /usr/sbin/run-lamp.sh
+RUN pecl install mongodb-1.4.3
+RUN echo "extension=mongodb.so" >> /etc/php/7.0/cli/php.ini
+RUN echo "extension=mongodb.so" >> /etc/php/7.0/apache/php.ini
 
 VOLUME /var/www/html
 VOLUME /var/log/httpd
@@ -82,9 +74,3 @@ RUN echo 'dev:ser_123' | chpasswd
 RUN usermod -aG sudo dev
 USER dev
 WORKDIR /home/dev
-
-#CMD ./usr/sbin/run-lamp.sh
-
-#docker build . -t ubuntu-php7:16.04
-#RUN chown -R www-data:www-data /var/www/html
-#docker run -it -p 8080:80 -v /home/docker:/var/www/html/ sanjayabc1234/ubuntu-php7:16.04 bash
